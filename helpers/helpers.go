@@ -2,6 +2,6 @@ package helpers
 
 import "strings"
 
-func split(s string) []string {
+func Split(s string) []string {
 	return strings.Split(s, "/n")
 }
