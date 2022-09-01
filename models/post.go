@@ -1,4 +1,4 @@
-package main
+package models
 
 type Post struct {
 	Author    string `json:"author"`
@@ -9,4 +9,5 @@ type Post struct {
 	Slug      string `json:"slug"`
 	Title     string `json:"title"`
 	Updated   string  `json:"updated"`
+	Summary   string `json:"summary"`
 }
