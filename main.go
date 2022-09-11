@@ -2,21 +2,31 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
-	"github.com/gin-gonic/gin"
-
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/xavierhazzardadmin/blog/handlers"
 	"github.com/xavierhazzardadmin/blog/helpers"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Routes
+	e.GET("/", handlers.GetNewArticles)
+	e.GET("/article/{name}", handlers.GetArticle)
+	e.GET("/articles", handlers.GetAllArticles)
+	e.GET("/profile", handlers.GetProfile)
+	e.GET("/profile/:name", handlers.GetProfile)
+	e.GET("/profiles", handlers.GetAllProfiles)
+
 	fmt.Println("Server running on Port 8080")
 	fmt.Println(helpers.SplitRows("This is a string\n\nThis is another string"))
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	e.Logger.Fatal(e.Start(":8080"))
+
 }
