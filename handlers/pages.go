@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/xavierhazzardadmin/blog/db"
 )
 
 func GetAllArticles(c echo.Context) error {
@@ -16,7 +19,12 @@ func GetNewArticles(c echo.Context) error {
 }
 
 func GetArticle(c echo.Context) error {
-	return c.String(http.StatusOK, "Single Article")
+	res, err := db.FindOne(strings.ToLower(c.Param("title")))
+
+	if err != nil {
+		c.Logger().Panic(err)
+	}
+	return c.String(http.StatusOK, fmt.Sprintf("You are viewing the article: %s", res.Title))
 }
 
 func GetProfile(c echo.Context) error {

@@ -18,7 +18,7 @@ func main() {
 
 	// Routes
 	e.GET("/", handlers.GetNewArticles)
-	e.GET("/article/{name}", handlers.GetArticle)
+	e.GET("/article/:title", handlers.GetArticle)
 	e.GET("/articles", handlers.GetAllArticles)
 	e.GET("/profile", handlers.GetProfile)
 	e.GET("/profile/:name", handlers.GetProfile)
