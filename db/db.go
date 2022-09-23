@@ -13,13 +13,13 @@ const (
 	collectionName string = "posts"
 )
 
-func Save(post *models.Post) (*models.Post, error) {
+func Save(post *models.Post) error {
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
 
 	if err != nil {
 		log.Fatalf("Error creating a firestore client: %v", err)
-		return nil, err
+		return err
 	}
 
 	defer client.Close()
@@ -37,12 +37,17 @@ func Save(post *models.Post) (*models.Post, error) {
 
 	if err != nil {
 		log.Fatalf("Error adding a new post: %v", err)
-		return nil, err
+		return err
 	}
 
-	return post, err
+	return err
 }
 
 func NewPost(post *models.Post) *models.Post {
 	return &models.Post{}
+}
+
+func Find(search models.Search) (*[]models.Post, error) {
+	return nil, nil
+    
 }
