@@ -5,9 +5,15 @@ type Post struct {
 	Content   string `json:"content"`
 	ID        int    `json:"id"`
 	MetaTitle string `json:"metaTitle"`
-	Published string  `json:"published"`
+	Published string `json:"published"`
 	Slug      string `json:"slug"`
 	Title     string `json:"title"`
-	Updated   string  `json:"updated"`
+	Updated   string `json:"updated"`
 	Summary   string `json:"summary"`
+}
+
+type Search struct {
+	QueryString string `json:"queryString"`
+	Author      string `json:"author"`
+	Year        int    `json:"year"`
 }

@@ -3,6 +3,7 @@ module github.com/xavierhazzardadmin/blog
 go 1.19
 
 require (
+	cloud.google.com/go/firestore v1.6.1
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
 	google.golang.org/api v0.94.0
@@ -11,7 +12,6 @@ require (
 require (
 	cloud.google.com/go v0.102.0 // indirect
 	cloud.google.com/go/compute v1.7.0 // indirect
-	cloud.google.com/go/firestore v1.6.1 // indirect
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/storage v1.22.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
