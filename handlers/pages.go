@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"strings"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/xavierhazzardadmin/blog/db"
@@ -19,7 +19,9 @@ func GetNewArticles(c echo.Context) error {
 }
 
 func GetArticle(c echo.Context) error {
-	res, err := db.FindOne(strings.ToLower(c.Param("title")))
+    id, _ := strconv.Atoi(c.Param("id"))
+
+	res, err := db.Get(id)
 
 	if err != nil {
 		c.Logger().Panic(err)
