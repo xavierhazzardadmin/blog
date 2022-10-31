@@ -1,7 +1,27 @@
 package helpers
 
-import "strings"
+import (
+	"log"
+	"os"
+	"strings"
+
+	"github.com/joho/godotenv"
+)
 
 func SplitRows(s string) []string {
 	return strings.Split(s, "\n\n")
+}
+
+func GetEnv(key string) string {
+
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	// set env variable using os package
+
+	// return the env variable using os package
+	return os.Getenv(key)
 }
