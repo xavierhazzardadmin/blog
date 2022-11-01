@@ -18,26 +18,26 @@ import (
 var authURI string = fmt.Sprintf("mongodb+srv://%s:%s@blog.w53zlvb.mongodb.net/?retryWrites=true&w=majority", helpers.GetEnv("MongoUser"), helpers.GetEnv("MongoPass"))
 
 
-func Insert(post *models.Post) *mongo.InsertOneResult {
+func Post(post *models.Post) error {
     post.ID = primitive.NewObjectID()
 	ctx := context.TODO()
 	opts := options.Client().ApplyURI(authURI)
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		panic(err)
+        fmt.Println("here", err.Error())
 	}
 	defer client.Disconnect(ctx)
 
 	db := client.Database("blog")
 	articles := db.Collection("articles")
 
-    result, err := articles.InsertOne(ctx, &post)
+    _, err = articles.InsertOne(ctx, &post)
     if err != nil {
         panic(err)
     }
 
-    return result
+    return err
 }
 
 func Get(id string) (*models.Post, error) {
