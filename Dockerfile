@@ -1,4 +1,4 @@
-FROM golang:1.19.3-alpine
+FROM golang:1.19.3-alpine AS build
 
 WORKDIR /app
 
@@ -6,10 +6,16 @@ COPY go.mod ./
 
 RUN go mod download
 
-COPY *.go ./
+COPY . ./
 
 RUN go build -o /blog
 
+FROM scratch
+
+WORKDIR /
+
+COPY --from=build /blog /blog
+
 EXPOSE 8080
 
-CMD ["/blog"]
+ENTRYPOINT ["/blog"]

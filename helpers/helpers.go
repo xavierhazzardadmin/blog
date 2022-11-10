@@ -12,7 +12,7 @@ func SplitRows(s string) []string {
 	return strings.Split(s, "\n\n")
 }
 
-func GetEnv(key string) string {
+func Get(key string) string {
 
 	err := godotenv.Load(".env")
 
@@ -24,4 +24,8 @@ func GetEnv(key string) string {
 
 	// return the env variable using os package
 	return os.Getenv(key)
+}
+
+func GetEnv(key string) string {
+    return os.Getenv(key)
 }
