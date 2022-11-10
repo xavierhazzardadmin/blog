@@ -3,8 +3,8 @@ package db
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/labstack/gommon/log"
 	"github.com/xavierhazzardadmin/blog/helpers"
 	"github.com/xavierhazzardadmin/blog/models"
 
@@ -15,7 +15,7 @@ import (
 )
 
 
-var authURI string = fmt.Sprintf("mongodb+srv://%s:%s@blog.w53zlvb.mongodb.net/?retryWrites=true&w=majority", helpers.GetEnv("MongoUser"), helpers.GetEnv("MongoPass"))
+var authURI string = fmt.Sprintf("mongodb+srv://%s:%s@projects.i6tlid9.mongodb.net/?retryWrites=true&w=majority", helpers.GetEnv("MongoUser"), helpers.GetEnv("MongoPass"))
 
 
 func Post(post *models.Post) error {
@@ -79,20 +79,23 @@ func GetAll(author string) ([]*models.Post, error) {
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		panic(err)
+        log.Info("Mongo connection error")
+		panic(err.Error())
 	}
 	defer client.Disconnect(ctx)
 
 	db := client.Database("blog")
 	articles := db.Collection("articles")
 
-    articleCursor, err := articles.Find(ctx, bson.M{"author": strings.ToLower(author)})
+    articleCursor, err := articles.Find(ctx, bson.M{"author": author})
     if err != nil {
-        panic(err)
+        log.Info("Mongo cursor error")
+        panic(err.Error())
     }
 
     if err = articleCursor.All(ctx, &posts); err != nil {
-       panic(err)
+       log.Info("Mongo Binding issue")
+       panic(err.Error())
     }
 
     return posts, err
