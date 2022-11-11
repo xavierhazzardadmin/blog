@@ -1,7 +1,10 @@
 package main
 
 import (
-	"github.com/go-playground/validator/v10"
+    "fmt"
+    "os"
+
+    "github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/xavierhazzardadmin/blog/models"
@@ -18,8 +21,12 @@ func main() {
 
 	// Routes
     e.POST("/posts/q", routes.GetAll)
-    e.GET("/post/:id", routes.Get)
+    e.GET("/posts/:id", routes.Get)
     e.POST("/posts", routes.Post)
+
+    var authURI string = fmt.Sprintf("%s", os.Getenv("MongoURI"))
+
+    fmt.Println(authURI)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

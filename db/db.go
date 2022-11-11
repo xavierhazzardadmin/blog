@@ -3,9 +3,9 @@ package db
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/labstack/gommon/log"
-	"github.com/xavierhazzardadmin/blog/helpers"
 	"github.com/xavierhazzardadmin/blog/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +15,7 @@ import (
 )
 
 
-var authURI string = fmt.Sprintf("mongodb+srv://%s:%s@projects.i6tlid9.mongodb.net/?retryWrites=true&w=majority", helpers.GetEnv("MongoUser"), helpers.GetEnv("MongoPass"))
+var authURI string = fmt.Sprintf("%s", os.Getenv("MongoURI"))
 
 
 func Post(post *models.Post) error {
@@ -41,6 +41,7 @@ func Post(post *models.Post) error {
 }
 
 func Get(id string) (*models.Post, error) {
+    fmt.Println(authURI)
 	var r bson.M
 	var result models.Post
     objID, err := primitive.ObjectIDFromHex(id)
