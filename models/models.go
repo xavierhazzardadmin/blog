@@ -25,6 +25,9 @@ type(
         Location string
     }
 
+    Response struct{
+        Message    string
+    }
 
 )
 

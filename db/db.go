@@ -41,7 +41,6 @@ func Post(post *models.Post) error {
 }
 
 func Get(id string) (*models.Post, error) {
-    fmt.Println(authURI)
 	var r bson.M
 	var result models.Post
     objID, err := primitive.ObjectIDFromHex(id)
@@ -103,11 +102,11 @@ func GetAll(author string) ([]*models.Post, error) {
 }
 
 
-func Delete(id string) *mongo.DeleteResult {
+func Delete(id string) error {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
-        panic(err)
+        panic(err.Error())
     }
 
     ctx := context.TODO()
@@ -115,38 +114,38 @@ func Delete(id string) *mongo.DeleteResult {
 
     client, err  := mongo.Connect(ctx, opts)
     if err != nil {
-        panic(err)
+        panic(err.Error())
     }
     defer client.Disconnect(ctx)
 
     db := client.Database("blog")
     articles := db.Collection("articles")
 
-    result, err := articles.DeleteOne(ctx, bson.M{"_id": objID} )
-    if err != nil {
-        panic(err)
-    }
+    _, err = articles.DeleteOne(ctx, bson.M{"_id": objID} )
 
-    return result
+    return err
 }
 
-func Update(post *models.Post) {
+func Update(id string, title string) error {
+    objID, err := primitive.ObjectIDFromHex(id)
+
+    if err != nil {
+        panic(err.Error())
+    }
     ctx := context.TODO()
     opts := options.Client().ApplyURI(authURI)
 
     client, err := mongo.Connect(ctx, opts)
 
     if err != nil {
-        panic(err)
+        panic(err.Error())
     }
     defer client.Disconnect(ctx)
 
     db := client.Database("blog")
     articles := db.Collection("articles")
 
-    _, err = articles.UpdateByID(ctx, post.ID, bson.D{primitive.E{Key:"title", Value: post.Title},})
+    _, err = articles.UpdateByID(ctx, objID, bson.D{primitive.E{Key:"title", Value: title},})
 
-    if  err != nil {
-        panic(err)
-    }
+    return err
 }

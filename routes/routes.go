@@ -51,7 +51,27 @@ func GetAll(c echo.Context) error {
 }
 
 //  Handler for updating posts
+func Update(c echo.Context) error {
+    id := c.Param("id")
+    title := c.FormValue("title") 
+    if err := db.Update(id, title); err != nil {
+        return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+    }
+
+    return c.JSON(http.StatusOK, models.Response{Message: "Title updated successfully."})
+
+}
 
 //  Handler for getting titles of each post to cache
 
 //  Handler for deleting posts
+
+func Delete(c echo.Context) error {
+    id := c.Param("id")
+
+    if err := db.Delete(id); err != nil {
+        return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+    }
+
+    return c.JSON(http.StatusOK, models.Response{Message: "Post deleted successfully."})
+}
