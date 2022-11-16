@@ -24,7 +24,7 @@ jobs:
               run: docker build . --file Dockerfile.multi --tag xavierhazzardamdin/blog:$(date +%s)
             
             - name: Push Docker Container
-              run: docker push ${{secrets.DOCKER_USERNAME}}/blog
+              run: docker push ${{secrets.DOCKER_USERNAME}}/blog:$(date +%s)
             
       
   
