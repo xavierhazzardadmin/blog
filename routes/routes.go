@@ -8,8 +8,6 @@ import (
 	"github.com/xavierhazzardadmin/blog/models"
 )
 
-//  Handler for inserting posts
-
 func Post(c echo.Context) error {
     p := new(models.Post)
     if err := c.Bind(p); err != nil {
@@ -24,8 +22,6 @@ func Post(c echo.Context) error {
     return c.JSON(http.StatusOK, p)
 }
 
-//  Handler for getting individual posts
-
 func Get(c echo.Context) error {
     id := c.Param("id")
     p, err := db.Get(id)
@@ -37,7 +33,6 @@ func Get(c echo.Context) error {
     return c.JSON(http.StatusOK, p)
 }
 
-//  Handler for getting all author posts
 func GetAll(c echo.Context) error {
     author := c.FormValue("author")
     posts, err :=  db.GetAll(author)
@@ -50,7 +45,6 @@ func GetAll(c echo.Context) error {
 
 }
 
-//  Handler for updating posts
 func Update(c echo.Context) error {
     id := c.Param("id")
     title := c.FormValue("title") 
@@ -63,8 +57,6 @@ func Update(c echo.Context) error {
 }
 
 //  Handler for getting titles of each post to cache
-
-//  Handler for deleting posts
 
 func Delete(c echo.Context) error {
     id := c.Param("id")

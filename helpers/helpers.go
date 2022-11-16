@@ -3,14 +3,12 @@ package helpers
 import (
 	"log"
 	"os"
-	"strings"
-
 	"github.com/joho/godotenv"
 )
 
-func SplitRows(s string) []string {
-	return strings.Split(s, "\n\n")
-}
+// func SplitRows(s string) []string {
+// 	return strings.Split(s, "\n\n")
+// }
 
 func Get(key string) string {
 
