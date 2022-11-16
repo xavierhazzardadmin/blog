@@ -67,3 +67,13 @@ func Delete(c echo.Context) error {
 
     return c.JSON(http.StatusOK, models.Response{Message: "Post deleted successfully."})
 }
+
+func Cache(c echo.Context) error {
+    posts, err := db.GetCache()
+
+    if err != nil{
+        return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+    }
+
+    return c.JSON(http.StatusOK, posts)
+}

@@ -114,7 +114,7 @@ func Delete(id string) error {
 
     client, err  := mongo.Connect(ctx, opts)
     if err != nil {
-        panic(err.Error())
+        log.Fatal(err.Error())
     }
     defer client.Disconnect(ctx)
 
@@ -130,7 +130,7 @@ func Update(id string, title string) error {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
-        panic(err.Error())
+        return err
     }
     ctx := context.TODO()
     opts := options.Client().ApplyURI(authURI)
@@ -138,7 +138,7 @@ func Update(id string, title string) error {
     client, err := mongo.Connect(ctx, opts)
 
     if err != nil {
-        panic(err.Error())
+        return err 
     }
     defer client.Disconnect(ctx)
 
@@ -148,4 +148,36 @@ func Update(id string, title string) error {
     _, err = articles.UpdateByID(ctx, objID, bson.D{primitive.E{Key:"title", Value: title},})
 
     return err
+}
+
+func GetCache() (*[]*models.Post, error) {
+    posts := make([]*models.Post, 0, 10)
+
+    ctx := context.TODO()
+    opts := options.Client().ApplyURI(authURI)
+
+    client, err := mongo.Connect(ctx, opts)
+
+    if err != nil {
+        return nil, err
+    }
+    defer client.Disconnect(ctx)
+
+    db := client.Database("blog")
+    articles := db.Collection("articles")
+
+    filter := bson.D{}
+    findOpts := options.Find().SetSort(bson.D{{"_id", 1}}).SetLimit(10)
+
+    cursor, err := articles.Find(ctx, filter, findOpts)
+
+    if err != nil {
+        return nil, err
+    }
+
+    if err = cursor.All(ctx, posts); err != nil {
+        return nil, err
+    }
+
+    return &posts, err
 }
