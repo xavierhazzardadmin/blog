@@ -151,7 +151,7 @@ func Update(id string, title string) error {
 }
 
 func GetCache() (*[]*models.Post, error) {
-    posts := make([]*models.Post, 0, 10)
+    posts := make([]*models.Post, 10)
 
     ctx := context.TODO()
     opts := options.Client().ApplyURI(authURI)
@@ -175,7 +175,7 @@ func GetCache() (*[]*models.Post, error) {
         return nil, err
     }
 
-    if err = cursor.All(ctx, posts); err != nil {
+    if err = cursor.All(ctx, &posts); err != nil {
         return nil, err
     }
 
