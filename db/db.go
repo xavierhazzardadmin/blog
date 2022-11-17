@@ -32,9 +32,10 @@ func Post(post *models.Post) error {
 	db := client.Database("blog")
 	articles := db.Collection("articles")
 
-    _, err = articles.InsertOne(ctx, &post)
+    _, err = articles.InsertOne(ctx, post)
     if err != nil {
-        panic(err)
+        fmt.Println("Post 1")
+        panic(err.Error())
     }
 
     return err
@@ -150,7 +151,7 @@ func Update(id string, title string) error {
     return err
 }
 
-func GetCache() (*[]*models.Post, error) {
+func GetCache() ([]*models.Post, error) {
     posts := make([]*models.Post, 10)
 
     ctx := context.TODO()
@@ -167,7 +168,7 @@ func GetCache() (*[]*models.Post, error) {
     articles := db.Collection("articles")
 
     filter := bson.D{}
-    findOpts := options.Find().SetSort(bson.D{{"_id", 1}}).SetLimit(10)
+    findOpts := options.Find().SetSort(bson.D{{"_id", -1}}).SetLimit(10)
 
     cursor, err := articles.Find(ctx, filter, findOpts)
 
@@ -179,5 +180,5 @@ func GetCache() (*[]*models.Post, error) {
         return nil, err
     }
 
-    return &posts, err
+    return posts, err
 }
