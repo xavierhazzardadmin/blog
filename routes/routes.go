@@ -51,13 +51,23 @@ func GetAll(c echo.Context) error {
 
 func Update(c echo.Context) error {
     id := c.Param("id")
-    title := c.FormValue("title") 
-    if err := db.Update(id, title); err != nil {
+    p := new(models.Post)
+
+    if err := c.Bind(p); err != nil {
+        fmt.Println("Routes 1")
+        return err
+    }
+
+    if err := c.Validate(p); err != nil {
+        fmt.Println("Routes 2")
+        return err
+    }
+
+    if err := db.Update(id, p); err != nil {
         return echo.NewHTTPError(http.StatusBadRequest, err.Error())
     }
 
     return c.JSON(http.StatusOK, models.Response{Message: "Title updated successfully."})
-
 }
 
 //  Handler for getting titles of each post to cache

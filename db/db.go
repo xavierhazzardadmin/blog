@@ -127,7 +127,7 @@ func Delete(id string) error {
     return err
 }
 
-func Update(id string, title string) error {
+func Update(id string, post *models.Post) error {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
@@ -146,7 +146,7 @@ func Update(id string, title string) error {
     db := client.Database("blog")
     articles := db.Collection("articles")
 
-    _, err = articles.UpdateByID(ctx, objID, bson.D{primitive.E{Key:"title", Value: title},})
+    _, err = articles.ReplaceOne(ctx, bson.D{primitive.E{Key: "_id", Value: objID}}, post)
 
     return err
 }
@@ -168,7 +168,7 @@ func GetCache() ([]*models.Post, error) {
     articles := db.Collection("articles")
 
     filter := bson.D{}
-    findOpts := options.Find().SetSort(bson.D{{"_id", -1}}).SetLimit(10)
+    findOpts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}}).SetLimit(10)
 
     cursor, err := articles.Find(ctx, filter, findOpts)
 
