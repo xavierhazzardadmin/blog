@@ -12,15 +12,12 @@ import (
 func Post(c echo.Context) error {
     p := new(models.Post)
     if err := c.Bind(p); err != nil {
-        fmt.Println("Routes 1")
         return err
     }
     if err := c.Validate(p); err != nil {
-        fmt.Println("Routes 2")
         return err
     }
     if err := db.Post(p); err != nil {
-        fmt.Println("Routes 3")
         return echo.NewHTTPError(http.StatusBadRequest, err.Error())
     }
     return c.JSON(http.StatusOK, p)
@@ -54,12 +51,10 @@ func Update(c echo.Context) error {
     p := new(models.Post)
 
     if err := c.Bind(p); err != nil {
-        fmt.Println("Routes 1")
         return err
     }
 
     if err := c.Validate(p); err != nil {
-        fmt.Println("Routes 2")
         return err
     }
 
