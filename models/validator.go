@@ -19,3 +19,10 @@ func (v *PostValidator) Validate(i interface{}) error {
     }
     return nil
 }
+
+func NewValidator() *PostValidator {
+    v := new(PostValidator)
+
+    v.Validator = validator.New()
+    return v
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-    "github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/xavierhazzardadmin/blog/models"
@@ -10,7 +9,7 @@ import (
 
 func main() {
 	e := echo.New()
-    e.Validator = &models.PostValidator{Validator: validator.New()}
+    e.Validator = models.NewValidator()
 
 	// Middleware
 	e.Use(middleware.Logger())

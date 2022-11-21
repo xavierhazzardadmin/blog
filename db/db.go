@@ -25,7 +25,8 @@ func Post(post *models.Post) error {
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-        fmt.Println("here", err.Error())
+        log.Info("Mongo Connection Error:")
+        return err
 	}
 	defer client.Disconnect(ctx)
 
@@ -34,8 +35,8 @@ func Post(post *models.Post) error {
 
     _, err = articles.InsertOne(ctx, post)
     if err != nil {
-        fmt.Println("Post 1")
-        panic(err.Error())
+        log.Info("Mongo Insertion Error:")
+        return err
     }
 
     return err
@@ -47,7 +48,8 @@ func Get(id string) (*models.Post, error) {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
-        panic(err)
+        log.Info("Mongo ID Error:")
+        return nil, err
     }
 
 	ctx := context.TODO()
@@ -55,7 +57,8 @@ func Get(id string) (*models.Post, error) {
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		panic(err)
+        log.Info("Mongo Connection Error")
+        return nil, err
 	}
 	defer client.Disconnect(ctx)
 
@@ -80,8 +83,8 @@ func GetAll(author string) ([]*models.Post, error) {
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-        log.Info("Mongo connection error")
-		panic(err.Error())
+        log.Info("Mongo Connection Error:")
+        return nil, err
 	}
 	defer client.Disconnect(ctx)
 
@@ -90,13 +93,13 @@ func GetAll(author string) ([]*models.Post, error) {
 
     articleCursor, err := articles.Find(ctx, bson.M{"author": author})
     if err != nil {
-        log.Info("Mongo cursor error")
-        panic(err.Error())
+        log.Info("Mongo Cursor Error:")
+        return nil, err
     }
 
     if err = articleCursor.All(ctx, &posts); err != nil {
-       log.Info("Mongo Binding issue")
-       panic(err.Error())
+        log.Info("Mongo Binding Error:")
+        return nil, err
     }
 
     return posts, err
@@ -107,7 +110,8 @@ func Delete(id string) error {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
-        panic(err.Error())
+        log.Info("Mongo ID Error:")
+        return err
     }
 
     ctx := context.TODO()
@@ -115,7 +119,8 @@ func Delete(id string) error {
 
     client, err  := mongo.Connect(ctx, opts)
     if err != nil {
-        log.Fatal(err.Error())
+        log.Info("Mongo Connection Error:")
+        return err
     }
     defer client.Disconnect(ctx)
 
@@ -131,6 +136,7 @@ func Update(id string, post *models.Post) error {
     objID, err := primitive.ObjectIDFromHex(id)
 
     if err != nil {
+        log.Info("Mongo ID Error:")
         return err
     }
     ctx := context.TODO()
@@ -139,6 +145,7 @@ func Update(id string, post *models.Post) error {
     client, err := mongo.Connect(ctx, opts)
 
     if err != nil {
+        log.Info("Mongo Connection Error:")
         return err 
     }
     defer client.Disconnect(ctx)
@@ -147,6 +154,11 @@ func Update(id string, post *models.Post) error {
     articles := db.Collection("articles")
 
     _, err = articles.ReplaceOne(ctx, bson.D{primitive.E{Key: "_id", Value: objID}}, post)
+
+    if err != nil {
+        log.Info("Mongo Replace Error:")
+        return err
+    }
 
     return err
 }
@@ -160,6 +172,7 @@ func GetCache() ([]*models.Post, error) {
     client, err := mongo.Connect(ctx, opts)
 
     if err != nil {
+        log.Info("Mongo Connection Error:")
         return nil, err
     }
     defer client.Disconnect(ctx)
@@ -173,10 +186,12 @@ func GetCache() ([]*models.Post, error) {
     cursor, err := articles.Find(ctx, filter, findOpts)
 
     if err != nil {
+        log.Info("Mongo Find Error:")
         return nil, err
     }
 
     if err = cursor.All(ctx, &posts); err != nil {
+        log.Info("Mongo Cursor Error:")
         return nil, err
     }
 
