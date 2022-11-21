@@ -16,12 +16,12 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-    e.GET("/cache", routes.Cache)
-    e.POST("/posts/q", routes.GetAll)
     e.GET("/posts/:id", routes.Get)
     e.POST("/posts", routes.Post)
     e.DELETE("/posts/:id", routes.Delete)
     e.PUT("/posts/:id", routes.Update)
+    e.POST("/posts/q", routes.GetAll)
+    e.GET("/cache", routes.Cache)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
